@@ -1,0 +1,892 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AntiGabutStore | Solusi Anti Gabut & Hiburan Digital</title>
+    
+    <!-- Google Fonts: Plus Jakarta Sans & Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet">
+    
+<!-- 👉 Tambahkan Favicon di sini -->
+    <link rel="icon" href="assets/images/logo.png" type="image/png">
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        heading: ['Plus Jakarta Sans', 'sans-serif'],
+                    },
+                    colors: {
+                        seakun: {
+                            primary: '#F97316',   /* Orange 500 */
+                            dark: '#EA580C',      /* Orange 600 */
+                            light: '#FFEDD5',     /* Orange 100 */
+                            mint: '#FFF7ED',      /* Orange 50 */
+                            accent: '#F59E0B',    /* Amber 500 */
+                            navy: '#1E293B',
+                        }
+                    },
+                    boxShadow: {
+                        'card': '0 4px 20px -2px rgba(249, 115, 22, 0.08)',
+                        'card-hover': '0 10px 25px -5px rgba(249, 115, 22, 0.18)',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Alpine.js -->
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
+    <style>
+        [x-cloak] { display: none !important; }
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        .dark ::-webkit-scrollbar-thumb { background: #334155; }
+        ::-webkit-scrollbar-thumb:hover { background: #F97316; }
+    </style>
+</head>
+<body 
+    x-data="storeApp()" 
+    x-init="initApp()"
+    :class="{ 'dark': darkMode }"
+    class="bg-white text-slate-800 dark:bg-slate-950 dark:text-slate-100 transition-colors duration-300 antialiased selection:bg-seakun-primary selection:text-white pb-20"
+>
+
+    <!-- ================= NAVBAR ================= -->
+    <header class="sticky top-0 z-50 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md border-b border-slate-100 dark:border-slate-800 transition-colors">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16 md:h-20">
+                
+                <!-- Logo -->
+                <a href="#" class="flex items-center gap-2.5 group">
+                    
+                     <!-- Tag Gambar Logo -->
+    <img src="assets/images/logoa.png" 
+         alt="Antigabutstore" 
+         class="h-11 w-auto object-contain transition-transform group-hover:scale-105" 
+         onerror="this.src='assets/images/default.png'"> <!-- Cadangan jika gambar gagal dimuat -->
+
+                    <span class="font-heading font-extrabold text-xl sm:text-2xl tracking-tight text-seakun-primary">ANTIGABUT<span class="text-slate-800 dark:text-white">store</span></span>
+                </a>
+
+                <!-- Desktop Menu -->
+                <nav class="hidden lg:flex items-center gap-6 text-sm font-medium text-slate-600 dark:text-slate-300">
+                    <a href="#layanan" class="flex items-center gap-1 text-seakun-primary font-semibold hover:text-seakun-dark transition">
+                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z" clip-rule="evenodd"/></svg>
+                        Layanan
+                    </a>
+                    <a href="#cara-pesan" class="hover:text-seakun-primary dark:hover:text-orange-400 transition">Cara Pesan</a>
+                    <a href="#testimoni" class="hover:text-seakun-primary dark:hover:text-orange-400 transition">Testimoni</a>
+                    <a href="#faq" class="hover:text-seakun-primary dark:hover:text-orange-400 transition">FAQ</a>
+                    <a href="#footer" class="hover:text-seakun-primary dark:hover:text-orange-400 transition">Kontak Kami</a>
+                </nav>
+
+                <!-- Right Actions -->
+                <div class="flex items-center gap-3">
+                    <!-- Dark/Light Theme Switcher -->
+                    <button 
+                        @click="toggleTheme()" 
+                        aria-label="Toggle Dark Mode"
+                        class="p-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-orange-400 hover:bg-seakun-light dark:hover:bg-slate-700 transition"
+                        title="Ubah Tema Gelap / Terang"
+                    >
+                        <!-- Sun Icon -->
+                        <svg x-show="darkMode" x-cloak class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/>
+                        </svg>
+                        <!-- Moon Icon -->
+                        <svg x-show="!darkMode" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/>
+                        </svg>
+                    </button>
+
+                    <!-- Tombol Lihat Layanan -->
+                    <a href="#layanan" class="hidden sm:inline-flex items-center justify-center px-5 py-2.5 rounded-xl bg-seakun-primary hover:bg-seakun-dark text-white font-semibold text-sm shadow-sm transition">
+                        Lihat Layanan
+                    </a>
+
+                    <!-- Mobile Hamburger -->
+                    <button @click="mobileMenu = !mobileMenu" class="lg:hidden p-2 rounded-xl text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800">
+                        <svg x-show="!mobileMenu" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+                        <svg x-show="mobileMenu" x-cloak class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Dropdown Navigation -->
+        <div x-show="mobileMenu" x-cloak x-transition class="lg:hidden bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 px-4 pt-2 pb-5 space-y-2">
+            <a @click="mobileMenu = false" href="#flash-sale" class="block px-3 py-2.5 rounded-lg text-seakun-primary font-semibold hover:bg-slate-50 dark:hover:bg-slate-800">⚡ Flash Sale</a>
+            <a @click="mobileMenu = false" href="#layanan" class="block px-3 py-2.5 rounded-lg text-slate-800 dark:text-slate-200 font-medium hover:bg-slate-50 dark:hover:bg-slate-800">Layanan</a>
+            <a @click="mobileMenu = false" href="#cara-pesan" class="block px-3 py-2.5 rounded-lg text-slate-800 dark:text-slate-200 font-medium hover:bg-slate-50 dark:hover:bg-slate-800">Cara Pesan</a>
+            <a @click="mobileMenu = false" href="#testimoni" class="block px-3 py-2.5 rounded-lg text-slate-800 dark:text-slate-200 font-medium hover:bg-slate-50 dark:hover:bg-slate-800">Testimoni</a>
+            <a @click="mobileMenu = false" href="#faq" class="block px-3 py-2.5 rounded-lg text-slate-800 dark:text-slate-200 font-medium hover:bg-slate-50 dark:hover:bg-slate-800">FAQ</a>
+            <div class="pt-2">
+                <a @click="mobileMenu = false" href="#layanan" class="block text-center py-2.5 rounded-xl bg-seakun-primary text-white font-semibold text-sm">Lihat Layanan</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- ================= HERO SECTION ================= -->
+    <section class="relative overflow-hidden bg-gradient-to-b from-seakun-mint via-white to-white dark:from-slate-900 dark:via-slate-950 dark:to-slate-950 pt-10 pb-16 md:pt-16 md:pb-24">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
+                
+                <!-- Left Copy -->
+                <div class="lg:col-span-7 text-center lg:text-left space-y-6">
+                    <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-seakun-light dark:bg-orange-950/60 border border-orange-200 dark:border-orange-800 text-seakun-primary text-xs sm:text-sm font-semibold">
+                        <span class="w-2 h-2 rounded-full bg-seakun-primary animate-pulse"></span>
+                        Platform Patungan Layanan Digital Terpercaya
+                    </div>
+                    
+                    <h1 class="font-heading font-extrabold text-3xl sm:text-4xl md:text-5xl lg:text-[52px] leading-tight text-slate-900 dark:text-white">
+                        Hilangkan Gabutmu <br class="hidden sm:block">
+                        <span class="bg-gradient-to-r from-amber-300 via-orange-500 to-orange-700 bg-clip-text text-transparent">dengan Layanan Premium</span>
+                    </h1>
+                    
+                    <p class="text-slate-700 dark:text-slate-300 text-base sm:text-lg max-w-2xl mx-auto lg:mx-0 leading-relaxed">
+                        Antigabutstore memberikan kamu kemudahan untuk berlangganan layanan premium seperti Netlfix, YouTube, Spotify dll dengan cara patungan yang membuat harga lebih murah namun tetap aman dan legal
+                Dapatkan manfaat Patungan Berlangganan. Nikmati layanan premium dengan lebih hemat, aman dan legal
+                    </p>
+
+                    <div class="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 pt-2">
+                        <a href="#layanan" class="w-full sm:w-auto px-8 py-3.5 rounded-xl bg-seakun-primary hover:bg-seakun-dark text-white font-bold text-base shadow-lg shadow-orange-500/25 transition transform hover:-translate-y-0.5 text-center">
+                            Lihat Layanan
+                        </a>
+                        <a href="#cara-pesan" class="w-full sm:w-auto px-8 py-3.5 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:border-seakun-primary text-slate-800 dark:text-slate-200 font-semibold text-base transition text-center">
+                            Cara Berlangganan
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Right Illustration -->
+      <!-- EDIT POSTER PROMO DISINI -->           
+ <div class="lg:col-span-5 flex justify-center" x-data="promoSlider()" x-init="startAutoSlide()">
+    <div class="relative w-full max-w-xs mx-auto">
+        <div class="absolute -inset-4 bg-gradient-to-tr from-orange-400/20 to-amber-300/25 dark:from-orange-500/10 dark:to-amber-500/10 rounded-full blur-2xl"></div>
+        
+        <!-- Wadah Carousel Poster (Diubah ukurannya lebih ramping dengan max-w-xs dan aspect ratio vertikal) -->
+        <div class="relative rounded-3xl overflow-hidden bg-white dark:bg-slate-900 border border-orange-100 dark:border-slate-800 shadow-xl aspect-[3/4] flex items-center justify-center">
+            
+            <!-- Slide 1 -->
+            <div class="absolute inset-0 transition-opacity duration-700 ease-in-out flex items-center justify-center p-2" :class="activeSlide === 0 ? 'opacity-100 z-10' : 'opacity-0 z-0'">
+                <img src="assets/images/poster1.jpeg" alt="Poster Promo 1" class="w-full h-full object-cover rounded-2xl" onerror="this.src='https://placehold.co/300x400?text=Poster+1+Tidak+Ditemukan'">
+            </div>
+
+            <!-- Slide 2 -->
+            <div class="absolute inset-0 transition-opacity duration-700 ease-in-out flex items-center justify-center p-2" :class="activeSlide === 1 ? 'opacity-100 z-10' : 'opacity-0 z-0'">
+                <img src="assets/images/poster2.jpeg" alt="Poster Promo 2" class="w-full h-full object-cover rounded-2xl" onerror="this.src='https://placehold.co/300x400?text=Poster+2+Tidak+Ditemukan'">
+            </div>
+
+            <!-- Slide 3 -->
+            <div class="absolute inset-0 transition-opacity duration-700 ease-in-out flex items-center justify-center p-2" :class="activeSlide === 2 ? 'opacity-100 z-10' : 'opacity-0 z-0'">
+                <img src="assets/images/poster3.jpeg" alt="Poster Promo 3" class="w-full h-full object-cover rounded-2xl" onerror="this.src='https://placehold.co/300x400?text=Poster+3+Tidak+Ditemukan'">
+            </div>
+
+            <!-- Indikator Dot di bagian bawah poster -->
+            <div class="absolute bottom-4 z-20 flex items-center gap-2 bg-slate-900/40 backdrop-blur-md px-3 py-1.5 rounded-full">
+                <template x-for="(slide, index) in 3" :key="index">
+                    <button 
+                        @click="activeSlide = index" 
+                        class="w-2.5 h-2.5 rounded-full transition-all duration-300"
+                        :class="activeSlide === index ? 'bg-seakun-primary w-6' : 'bg-white/60 hover:bg-white'"
+                        :aria-label="`Slide ${index + 1}`"
+                    ></button>
+                </template>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Batas EDIT POSTER PROMO sampai SINI --> 
+
+        </div>
+    </section>
+
+    <!-- ================= STATS BANNER ================= -->
+    <section class="py-8 bg-seakun-primary text-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col lg:flex-row items-center justify-between gap-8">
+                <div class="text-center lg:text-left max-w-md">
+                    <h2 class="font-heading font-bold text-xl sm:text-2xl text-white">Jadilah bagian dari AntiGabutStore</h2>
+                    <p class="text-orange-100 text-sm mt-1">Dapatkan manfaat Patungan Berlangganan. Nikmati layanan premium dengan lebih hemat, aman dan legal.</p>
+                </div>
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-6 sm:gap-10 w-full lg:w-auto text-center">
+                    <div>
+                        <div class="font-heading font-extrabold text-2xl sm:text-3xl text-white">20.000+</div>
+                        <div class="text-orange-100 text-xs sm:text-sm mt-0.5">Pengguna</div>
+                    </div>
+                    <div>
+                        <div class="font-heading font-extrabold text-2xl sm:text-3xl text-white">120.000+</div>
+                        <div class="text-orange-100 text-xs sm:text-sm mt-0.5">Transaksi</div>
+                    </div>
+                    <div>
+                        <div class="font-heading font-extrabold text-2xl sm:text-3xl text-white">15+</div>
+                        <div class="text-orange-100 text-xs sm:text-sm mt-0.5">Layanan</div>
+                    </div>
+                    <div>
+                        <div class="font-heading font-extrabold text-2xl sm:text-3xl text-white">9.5/10</div>
+                        <div class="text-orange-100 text-xs sm:text-sm mt-0.5">Tingkat Kepuasan</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ================= BENEFITS SECTION ================= -->
+    <section class="py-16 md:py-20 bg-white dark:bg-slate-950">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-2xl mx-auto mb-12">
+                <h2 class="font-heading font-bold text-2xl sm:text-3xl text-slate-900 dark:text-white">Beragam Manfaat Yang Bisa Kamu Dapatkan</h2>
+                <p class="text-slate-600 dark:text-slate-300 text-sm sm:text-base mt-2">Sistem berlangganan bersama yang dirancang transparan dan nyaman untuk semua member.</p>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                <template x-for="benefit in benefits" :key="benefit.title">
+                    <div class="p-6 rounded-2xl bg-seakun-mint/60 dark:bg-slate-900 border border-orange-100/80 dark:border-slate-800 hover:border-seakun-primary transition group">
+                        <div class="w-12 h-12 rounded-xl bg-seakun-light dark:bg-orange-950 text-seakun-primary flex items-center justify-center mb-4 group-hover:scale-105 transition" x-html="benefit.icon"></div>
+                        <h3 class="font-heading font-bold text-lg text-slate-900 dark:text-white" x-text="benefit.title"></h3>
+                        <p class="text-sm text-slate-700 dark:text-slate-300 mt-1.5 leading-relaxed" x-text="benefit.desc"></p>
+                    </div>
+                </template>
+            </div>
+        </div>
+    </section>
+
+    <!-- ================= FLASH SALE SECTION ================= -->
+    
+
+    <!-- ================= CATALOG SECTION ================= -->
+    <section id="layanan" class="py-16 md:py-24 bg-slate-50/70 dark:bg-slate-950">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10">
+                <div>
+                    <h2 class="font-heading font-bold text-2xl sm:text-3xl text-slate-900 dark:text-white">Berlangganan Produk Digital</h2>
+                    <p class="text-slate-600 dark:text-slate-300 text-sm sm:text-base mt-1">Pilih layanan favoritmu dan mulai patungan secara aman & legal.</p>
+                </div>
+
+                <!-- Search & Category Filter -->
+                <div class="flex flex-col sm:flex-row gap-3 w-full md:w-auto">
+                    <div class="relative flex-1 sm:w-64">
+                        <input 
+                            type="text" 
+                            x-model="searchQuery" 
+                            placeholder="Cari Netflix, Spotify, AI..." 
+                            class="w-full pl-10 pr-4 py-2.5 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-100 text-sm focus:outline-none focus:border-seakun-primary placeholder-slate-400 dark:placeholder-slate-500"
+                        >
+                        <svg class="w-4 h-4 text-slate-400 absolute left-3.5 top-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+                    </div>
+
+                    <select 
+                        x-model="selectedCategory" 
+                        class="px-4 py-2.5 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-100 text-sm font-medium focus:outline-none focus:border-seakun-primary"
+                    >
+                        <option value="Semua">Semua Kategori</option>
+                        <option value="Streaming">Video & Streaming</option>
+                        <option value="Musik">Musik</option>
+                        <option value="AI & Produktivitas">AI & Produktivitas</option>
+                        <option value="Desain & Edukasi">Desain & Edukasi</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Product Cards Grid -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                <template x-for="product in filteredProducts" :key="product.id">
+                    <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/80 dark:border-slate-800 p-5 shadow-card hover:shadow-card-hover hover:border-seakun-primary/50 transition flex flex-col justify-between relative">
+                        
+                        <span x-show="product.isNew" class="absolute top-4 right-4 px-2.5 py-0.5 rounded-full bg-orange-100 dark:bg-orange-950 text-seakun-primary text-[11px] font-bold">
+                            Baru
+                        </span>
+
+                        <div>
+                            <div class="flex items-center gap-3.5 mb-4">
+                                <div class="w-12 h-12 rounded-xl flex items-center justify-center shrink-0 overflow-hidden border border-slate-100 dark:border-slate-800 shadow-sm p-1.5 bg-white dark:bg-slate-800">
+                                    <img :src="product.logoUrl" :alt="product.name" class="w-full h-full object-contain rounded-md" @error="$el.style.display='none'; $el.nextElementSibling.style.display='flex'">
+                                    <div class="w-full h-full items-center justify-center text-white font-heading font-extrabold text-xs hidden rounded-lg" :style="`background-color: ${product.bgColor}`" x-text="product.initial"></div>
+                                </div>
+                                <div>
+                                    <h3 class="font-heading font-bold text-base text-slate-900 dark:text-white" x-text="product.name"></h3>
+                                    <span class="text-xs text-slate-500 dark:text-slate-400 font-medium" x-text="product.category"></span>
+                                </div>
+                            </div>
+
+                            <div class="space-y-2.5 border-t border-slate-100 dark:border-slate-800 pt-3.5">
+                                <template x-for="variant in product.variants" :key="variant.name">
+                                    <div class="flex items-center justify-between text-xs">
+                                        <div>
+                                            <div class="font-medium text-slate-700 dark:text-slate-200" x-text="variant.name"></div>
+                                            <div class="text-[11px] text-slate-500 dark:text-slate-400" x-text="variant.duration"></div>
+                                        </div>
+                                        <div class="font-bold text-seakun-primary text-right" x-text="variant.price"></div>
+                                    </div>
+                                </template>
+                            </div>
+                        </div>
+
+                        <div class="mt-5 pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between gap-2">
+                            <button 
+                                @click="openSchemeModal(product)" 
+                                class="text-xs font-semibold text-seakun-primary dark:text-orange-400 hover:underline flex items-center gap-1"
+                            >
+                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                                Lihat skema harga
+                            </button>
+
+                            <button 
+                                @click="openOrderModal(product.name, product.variants[0].name, product.variants[0].price)" 
+                                class="px-4 py-2 rounded-xl bg-seakun-primary hover:bg-seakun-dark text-white text-xs font-bold transition shadow-sm"
+                            >
+                                Pesan
+                            </button>
+                        </div>
+                    </div>
+                </template>
+            </div>
+        </div>
+    </section>
+
+    <!-- ================= CARA BERLANGGANAN ================= -->
+    <section id="cara-pesan" class="py-16 md:py-20 bg-seakun-mint/50 dark:bg-slate-950">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-2xl mx-auto mb-12">
+                <h2 class="font-heading font-bold text-2xl sm:text-3xl text-slate-900 dark:text-white">Cara Berlangganan</h2>
+                <p class="text-slate-600 dark:text-slate-300 text-sm sm:text-base mt-2">Hanya butuh 5 langkah mudah untuk mulai menikmati layanan premium favoritmu.</p>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6">
+                <template x-for="(step, idx) in orderSteps" :key="step.title">
+                    <div class="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200/80 dark:border-slate-800 text-center relative shadow-sm">
+                        <div class="w-10 h-10 rounded-full bg-seakun-primary text-white font-heading font-bold flex items-center justify-center mx-auto mb-4 shadow-md" x-text="idx + 1"></div>
+                        <h3 class="font-heading font-bold text-base text-slate-900 dark:text-white" x-text="step.title"></h3>
+                        <p class="text-xs text-slate-600 dark:text-slate-300 mt-1.5" x-text="step.desc"></p>
+                    </div>
+                </template>
+            </div>
+
+            <!-- Metode Pembayaran & Partner -->
+            <div class="mt-14 p-6 sm:p-8 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 flex flex-col lg:flex-row items-center justify-between gap-6">
+                <div>
+                    <h3 class="font-heading font-bold text-lg text-slate-900 dark:text-white">Metode Pembayaran Lengkap & Terverifikasi</h3>
+                    <p class="text-sm text-slate-600 dark:text-slate-300 mt-1">Virtual Account (BCA, Mandiri, BRI), E-Wallet (DANA, LinkAja), Tersedia QRIS buat mempermudah transaksi.</p>
+                </div>
+                
+<div class="flex flex-wrap items-center gap-3">
+    <!-- QRIS -->
+    <div class="flex items-center justify-center px-3.5 py-2.5 rounded-xl bg-white dark:bg-slate-800 border border-slate-200/80 dark:border-slate-700 shadow-sm hover:border-seakun-primary transition">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/e/e1/QRIS_logo.svg" alt="QRIS" class="h-5 w-auto object-contain" onerror="this.style.display='none'; this.nextElementSibling.style.display='inline';">
+        <span class="font-heading font-extrabold text-xs tracking-tight text-slate-800 dark:text-slate-100 hidden">QRIS</span>
+    </div>
+
+    <!-- Mandiri -->
+    <div class="flex items-center justify-center px-3.5 py-2.5 rounded-xl bg-white dark:bg-slate-800 border border-slate-200/80 dark:border-slate-700 shadow-sm hover:border-seakun-primary transition">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/a/ad/Bank_Mandiri_logo_2016.svg" alt="Mandiri" class="h-4 w-auto object-contain" onerror="this.style.display='none'; this.nextElementSibling.style.display='inline';">
+        <span class="font-heading font-extrabold text-xs tracking-tight text-blue-700 dark:text-blue-400 hidden">Mandiri</span>
+    </div>
+
+    <!-- BRI -->
+    <div class="flex items-center justify-center px-3.5 py-2.5 rounded-xl bg-white dark:bg-slate-800 border border-slate-200/80 dark:border-slate-700 shadow-sm hover:border-seakun-primary transition">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/6/68/Bank_Rakyat_Indonesia_logo.svg" alt="BRI" class="h-4 w-auto object-contain" onerror="this.style.display='none'; this.nextElementSibling.style.display='inline';">
+        <span class="font-heading font-extrabold text-xs tracking-tight text-blue-600 dark:text-blue-400 hidden">BRI</span>
+    </div>
+
+    <!-- BCA -->
+    <div class="flex items-center justify-center px-3.5 py-2.5 rounded-xl bg-white dark:bg-slate-800 border border-slate-200/80 dark:border-slate-700 shadow-sm hover:border-seakun-primary transition">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/5/5c/Bank_Central_Asia_logo.svg" alt="BCA" class="h-4 w-auto object-contain" onerror="this.style.display='none'; this.nextElementSibling.style.display='inline';">
+        <span class="font-heading font-extrabold text-xs tracking-tight text-blue-800 dark:text-blue-300 hidden">BCA</span>
+    </div>
+
+    <!-- LinkAja -->
+    <div class="flex items-center justify-center px-3.5 py-2.5 rounded-xl bg-white dark:bg-slate-800 border border-slate-200/80 dark:border-slate-700 shadow-sm hover:border-seakun-primary transition">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/e/e8/LinkAja_logo.svg" alt="LinkAja" class="h-4 w-auto object-contain" onerror="this.style.display='none'; this.nextElementSibling.style.display='inline';">
+        <span class="font-heading font-extrabold text-xs tracking-tight text-rose-600 dark:text-rose-400 hidden">LinkAja</span>
+    </div>
+
+    <!-- DANA -->
+    <div class="flex items-center justify-center px-3.5 py-2.5 rounded-xl bg-white dark:bg-slate-800 border border-slate-200/80 dark:border-slate-700 shadow-sm hover:border-seakun-primary transition">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/7/72/Logo_dana_blue.svg" alt="DANA" class="h-4 w-auto object-contain" onerror="this.style.display='none'; this.nextElementSibling.style.display='inline';">
+        <span class="font-heading font-extrabold text-xs tracking-tight text-sky-500 dark:text-sky-400 hidden">DANA</span>
+    </div>
+</div>
+   <!-- Batas script logo -->   
+             
+            </div>
+        </div>
+    </section>
+
+    <!-- ================= TESTIMONIALS ================= -->
+    <section id="testimoni" class="py-16 bg-seakun-mint/40 dark:bg-slate-950">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-2xl mx-auto mb-12">
+                <h2 class="font-heading font-bold text-2xl sm:text-3xl text-slate-900 dark:text-white">Apa kata mereka yang menggunakan AntiGabutStore?</h2>
+                <p class="text-slate-600 dark:text-slate-300 text-sm mt-2">Lebih dari 50.000+ pengguna telah menikmati pengalaman berpatungan yang memuaskan bersama kami.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="p-6 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-sm">
+                    <div class="flex items-center gap-1 text-amber-400 text-sm mb-3">★★★★★</div>
+                    <p class="text-sm text-slate-700 dark:text-slate-300 italic">"Udah langganan Netflix & Spotify di AntiGabutStore, aman banget dan adminnya gercep kalau ada kendala. Pengingat perpanjangannya juga ngebantu!"</p>
+                    <div class="mt-4 font-heading font-bold text-xs text-slate-900 dark:text-white">— Nabila R., Member setia</div>
+                </div>
+                <div class="p-6 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-sm">
+                    <div class="flex items-center gap-1 text-amber-400 text-sm mb-3">★★★★★</div>
+                    <p class="text-sm text-slate-700 dark:text-slate-300 italic">"Skema harganya transparan banget, dibagi rata sesuai jumlah member grup. Jadi gak was-was akun kena hold kayak beli di lapak random."</p>
+                    <div class="mt-4 font-heading font-bold text-xs text-slate-900 dark:text-white">— Dimas P., Member YouTube Family</div>
+                </div>
+                <div class="p-6 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-sm">
+                    <div class="flex items-center gap-1 text-amber-400 text-sm mb-3">★★★★★</div>
+                    <p class="text-sm text-slate-700 dark:text-slate-300 italic">"Sangat membantu buat mahasiswa & freelancer yang butuh Canva Pro, ChatGPT, dan Google One dengan budget hemat tapi tetap legal."</p>
+                    <div class="mt-4 font-heading font-bold text-xs text-slate-900 dark:text-white">— Sarah A., Member Canva & AI</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ================= FAQ SECTION ================= -->
+    <section id="faq" class="py-16 md:py-20 bg-white dark:bg-slate-900">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h2 class="font-heading font-bold text-2xl sm:text-3xl text-slate-900 dark:text-white">Frequently Asked Question (FAQ)</h2>
+                <p class="text-slate-600 dark:text-slate-300 text-sm mt-2">Berikut ini pertanyaan-pertanyaan yang sering ditanyakan pengguna</p>
+            </div>
+
+            <div class="space-y-3">
+                <template x-for="(faq, index) in faqs" :key="index">
+                    <div class="border border-slate-200 dark:border-slate-800 rounded-2xl overflow-hidden bg-slate-50/50 dark:bg-slate-800/40">
+                        <button 
+                            @click="openFaq === index ? openFaq = null : openFaq = index"
+                            class="w-full px-6 py-4 text-left flex items-center justify-between gap-4 font-heading font-semibold text-sm sm:text-base text-slate-800 dark:text-slate-100 hover:text-seakun-primary dark:hover:text-orange-400 transition"
+                        >
+                            <span x-text="faq.q"></span>
+                            <svg 
+                                class="w-5 h-5 shrink-0 text-seakun-primary transition-transform duration-200" 
+                                :class="{ 'rotate-180': openFaq === index }"
+                                fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                            >
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                            </svg>
+                        </button>
+                        <div x-show="openFaq === index" x-cloak x-transition class="px-6 pb-5 text-sm text-slate-700 dark:text-slate-300 leading-relaxed border-t border-slate-200 dark:border-slate-800 pt-3">
+                            <p x-text="faq.a"></p>
+                        </div>
+                    </div>
+                </template>
+            </div>
+        </div>
+    </section>
+
+    <!-- ================= FOOTER ================= -->
+    <footer id="footer" class="bg-slate-900 text-slate-200 pt-16 pb-10 border-t border-slate-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 pb-12 border-b border-slate-800">
+                
+                <!-- Brand Info -->
+                <div class="space-y-4">
+                    <div class="flex items-center gap-2">
+                        
+                        <!-- Tag Gambar Logo -->
+    <img src="assets/images/logoa.png" 
+         alt="Antigabutstore" 
+         class="h-11 w-auto object-contain transition-transform group-hover:scale-105" 
+         onerror="this.src='assets/images/default.png'"> <!-- Cadangan jika gambar gagal dimuat -->
+
+                        <span class="font-heading font-extrabold text-xl text-white">antigabut<span class="text-seakun-primary">store</span></span>
+                    </div>
+                    <p class="text-xs text-slate-300 leading-relaxed">
+                        Platform yang memberikan kamu kemudahan untuk berlangganan layanan premium seperti Netlfix, YouTube, Spotify dll dengan cara patungan yang membuat harga lebih murah namun tetap aman dan legal
+                    </p>
+                </div>
+
+                <!-- Store Links -->
+                <div>
+                    <h4 class="font-heading font-bold text-white text-sm mb-4">AntiGabutStore</h4>
+                    <ul class="space-y-2.5 text-xs text-slate-300">
+                        <li><a href="#" class="hover:text-seakun-primary transition">Tentang Kami</a></li>
+                        <li><a href="#layanan" class="hover:text-seakun-primary transition">Layanan</a></li>
+                        <li><a href="#cara-pesan" class="hover:text-seakun-primary transition">Cara Pesan</a></li>
+                        <li><a href="#testimoni" class="hover:text-seakun-primary transition">Testimoni</a></li>
+                        <li><a href="#faq" class="hover:text-seakun-primary transition">FAQ</a></li>
+                    </ul>
+                </div>
+
+                <!-- Produk Links -->
+                <div>
+                    <h4 class="font-heading font-bold text-white text-sm mb-4">Produk</h4>
+                    <ul class="space-y-2.5 text-xs text-slate-300">
+                        <li><a href="#layanan" class="hover:text-seakun-primary transition">Produk Digital</a></li>
+                        <li><a href="#layanan" class="hover:text-seakun-primary transition">Video Streaming</a></li>
+                        <li><a href="#layanan" class="hover:text-seakun-primary transition">Musik Premium</a></li>
+                        <li><a href="#layanan" class="hover:text-seakun-primary transition">AI & Produktivitas</a></li>
+                    </ul>
+                </div>
+
+                <!-- Hubungi Kami -->
+                <div>
+                    <h4 class="font-heading font-bold text-white text-sm mb-4">Hubungi Kami</h4>
+                    <ul class="space-y-2.5 text-xs text-slate-300">
+                        <li>Instagram: <span class="text-white font-medium">antigabutstore</span></li>
+                        <li>WhatsApp Admin 1: <span class="text-white font-medium">+62 857-8470-3817</span></li>
+                        <li>WhatsApp Admin 2: <span class="text-white font-medium">+62 815-1519-0070</span></li>
+                        <li class="pt-2">
+                            <strong class="block text-white mb-0.5">Jam Operasional</strong>
+                            Setiap Hari: 09.00 - 21.00 WIB
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="pt-8 text-center sm:text-left flex flex-col sm:flex-row justify-between items-center gap-4 text-[11px] text-slate-400">
+                <p>This website is an independent service and is not affiliated with, endorsed by, or associated with Netflix or any other service provider.</p>
+                <p class="text-xs text-slate-400 pt-4"> created by <a href="https://instagram.com/abdimas_aja?igshid=YmMyMTA2M2Y="> abdimas_aja </a> | AntiGabutStore © 2026 All right reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- ================= MODAL: SKEMA HARGA ================= -->
+    <div x-show="schemeModal" x-cloak class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm">
+        <div @click.away="schemeModal = false" class="bg-white dark:bg-slate-900 rounded-3xl max-w-md w-full p-6 shadow-2xl border border-slate-200 dark:border-slate-800 text-slate-800 dark:text-slate-100">
+            <div class="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800">
+                <h3 class="font-heading font-bold text-lg text-slate-900 dark:text-white" x-text="`Skema Harga - ${activeProduct?.name}`"></h3>
+                <button @click="schemeModal = false" class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 text-xl font-bold">&times;</button>
+            </div>
+            <div class="py-4 space-y-3 text-sm">
+                <p class="text-slate-700 dark:text-slate-300">AntiGabutStore menerapkan sistem pembagian biaya secara transparan dibagi rata dengan jumlah member dalam 1 akun resmi:</p>
+                <div class="p-3.5 rounded-xl bg-seakun-mint dark:bg-slate-800 space-y-1.5 text-xs text-slate-800 dark:text-slate-200 border border-orange-100 dark:border-slate-700">
+                    <div class="flex justify-between"><span>Harga Paket Resmi Provider:</span><strong x-text="activeProduct?.officialPrice || 'Rp186.000 / bln'"></strong></div>
+                    <div class="flex justify-between"><span>Kapasitas Sharing Resmi:</span><strong x-text="activeProduct?.groupSize || '5 Member'"></strong></div>
+                    <div class="flex justify-between"><span>Biaya Admin & Layanan:</span><strong>Termasuk</strong></div>
+                </div>
+                <p class="text-xs text-slate-600 dark:text-slate-400">Paket Bulanan Kamu bisa memilih <strong>Order secara Langsung</strong> (Sesuai HARGA) atau <strong>Mendapatkan Promo</strong> Hanya dengan bertanya ke Admin apa saja promo yang tersedia saat ini.</p>
+            </div>
+            <div class="flex justify-end gap-2 pt-2">
+                <button @click="schemeModal = false" class="px-4 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200 text-xs font-semibold hover:bg-slate-200 dark:hover:bg-slate-700 transition">Tutup</button>
+                <button @click="schemeModal = false; openOrderModal(activeProduct.name, activeProduct.variants[0].name, activeProduct.variants[0].price)" class="px-5 py-2 rounded-xl bg-seakun-primary text-white text-xs font-bold shadow-sm">Lanjut Pesan</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================= MODAL: FORM PEMESANAN WHATSAPP ================= -->
+    <div x-show="orderModal" x-cloak class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm">
+        <div @click.away="orderModal = false" class="bg-white dark:bg-slate-900 rounded-3xl max-w-md w-full p-6 shadow-2xl border border-slate-200 dark:border-slate-800 text-slate-800 dark:text-slate-100">
+            <div class="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800">
+                <h3 class="font-heading font-bold text-lg text-slate-900 dark:text-white">Pesan Layanan via WhatsApp</h3>
+                <button @click="orderModal = false" class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 text-xl font-bold">&times;</button>
+            </div>
+            <form @submit.prevent="sendToWhatsApp()" class="py-4 space-y-4">
+                <div class="p-3.5 rounded-xl bg-seakun-light dark:bg-orange-950/50 border border-orange-200 dark:border-orange-800">
+                    <div class="text-xs text-slate-600 dark:text-slate-300">Layanan Dipilih:</div>
+                    <div class="font-heading font-bold text-base text-seakun-primary" x-text="`${orderForm.service} - ${orderForm.variant}`"></div>
+                    <div class="text-sm font-bold text-slate-900 dark:text-white mt-0.5" x-text="orderForm.price"></div>
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">Nama Lengkap</label>
+                    <input type="text" required x-model="orderForm.customerName" placeholder="Masukkan namamu" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100 text-sm placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:border-seakun-primary">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">Catatan Tambahan (Opsional)</label>
+                    <input type="text" x-model="orderForm.note" placeholder="Contoh: Request Paket 1 atau 2 Bulan" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100 text-sm placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:border-seakun-primary">
+                </div>
+                <button type="submit" class="w-full py-3 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-sm transition flex items-center justify-center gap-2 shadow-sm">
+                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/></svg>
+                    Kirim Pesan ke WhatsApp Admin
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- ================= FLOATING BUTTON: ORDER SEKARANG ================= -->
+    <div class="fixed bottom-5 inset-x-0 z-40 flex justify-center px-4 pointer-events-none">
+        <button 
+            type="button"
+            @click="openFloatingWhatsApp()"
+            class="pointer-events-auto inline-flex items-center gap-2.5 px-6 py-3.5 rounded-full bg-emerald-600 hover:bg-emerald-700 active:scale-95 text-white font-heading font-bold text-sm sm:text-base shadow-xl shadow-emerald-600/30 border border-emerald-400/30 transition-all duration-200 hover:-translate-y-0.5 cursor-pointer"
+            aria-label="Order Sekarang via WhatsApp Admin"
+        >
+            <svg class="w-5 h-5 shrink-0" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/>
+            </svg>
+            <span>Order Sekarang</span>
+        </button>
+    </div>
+
+    <!-- ================= ALPINE.JS STATE & DATA ================= -->
+    <script>
+        function storeApp() {
+            return {
+                darkMode: false,
+                mobileMenu: false,
+                searchQuery: '',
+                selectedCategory: 'Semua',
+                openFaq: 0,
+                schemeModal: false,
+                orderModal: false,
+                activeProduct: null,
+                orderForm: { service: '', variant: '', price: '', customerName: '', note: '' },
+                countdown: { hours: '03', minutes: '45', seconds: '59' },
+
+                // Daftar 2 Nomor WhatsApp Admin
+                adminPhones: [
+                    '6285784703817', // Nomor Admin 1
+                    '6281515190070'  // Nomor Admin 2
+                ],
+
+                initApp() {
+                    const savedTheme = localStorage.getItem('store-theme');
+                    if (savedTheme === 'dark' || (!savedTheme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                        this.darkMode = true;
+                    }
+                    this.startCountdown();
+                },
+
+                toggleTheme() {
+                    this.darkMode = !this.darkMode;
+                    localStorage.setItem('store-theme', this.darkMode ? 'dark' : 'light');
+                },
+
+                startCountdown() {
+                    let totalSeconds = 3 * 3600 + 45 * 60 + 59;
+                    setInterval(() => {
+                        if (totalSeconds > 0) totalSeconds--;
+                        const h = String(Math.floor(totalSeconds / 3600)).padStart(2, '0');
+                        const m = String(Math.floor((totalSeconds % 3600) / 60)).padStart(2, '0');
+                        const s = String(totalSeconds % 60).padStart(2, '0');
+                        this.countdown = { hours: h, minutes: m, seconds: s };
+                    }, 1000);
+                },
+
+                openSchemeModal(product) {
+                    this.activeProduct = product;
+                    this.schemeModal = true;
+                },
+
+                openOrderModal(service, variant, price) {
+                    this.orderForm.service = service;
+                    this.orderForm.variant = variant;
+                    this.orderForm.price = price;
+                    this.orderModal = true;
+                },
+
+                sendToWhatsApp() {
+                    // Memilih salah satu dari 2 nomor admin secara acak (random)
+                    const randomIndex = Math.floor(Math.random() * this.adminPhones.length);
+                    const selectedAdminPhone = this.adminPhones[randomIndex];
+
+                    const text = `Halo Admin AntiGabutStore, saya ingin memesan layanan berikut:%0A%0A*Layanan:* ${this.orderForm.service}%0A*Paket/Varian:* ${this.orderForm.variant}%0A*Harga:* ${this.orderForm.price}%0A*Nama:* ${this.orderForm.customerName}%0A*Catatan:* ${this.orderForm.note || '-'}`;
+                    
+                    window.open(`https://wa.me/${selectedAdminPhone}?text=${text}`, '_blank');
+                    this.orderModal = false;
+                },
+
+                openFloatingWhatsApp() {
+                    const twoAdmins = this.adminPhones.slice(0, 2);
+                    const randomIndex = Math.floor(Math.random() * twoAdmins.length);
+                    const selectedAdminPhone = twoAdmins[randomIndex];
+                    const text = encodeURIComponent('Halo Admin AntiGabutStore, saya ingin order layanan sekarang.');
+
+                    window.open(`https://wa.me/${selectedAdminPhone}?text=${text}`, '_blank');
+                },
+
+                benefits: [
+                    { title: 'Hemat Hingga 70%', desc: 'Biaya langganan dibagi rata secara adil sesuai jumlah member resmi di dalam satu akun.', icon: '<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>' },
+                    { title: 'Privasi Terjamin', desc: 'Akun hanya dibagikan kepada customer di dalam satu akun yang sama, tidak disebar massal.', icon: '<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>' },
+                    { title: 'Admin Responsif', desc: 'Admin order dan Admin Komplain siap membantu setiap hari pukul 09.00 - 21.00 WIB jika terjadi kendala akun.', icon: '<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636l3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z"/></svg>' },
+                    { title: 'Beragam Metode Pembayaran', desc: 'Mendukung Virtual Account, E-Wallet, QRIS, hingga transfer bank populer di Indonesia.', icon: '<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/></svg>' },
+                    { title: 'Layanan Legal dan Resmi', desc: 'Seluruh langganan dibeli langsung dari penyedia resmi (Family/Group Plan), bukan akun bajakan.', icon: '<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"/></svg>' },
+                    { title: 'Pengingat Pembayaran', desc: 'Notifikasi otomatis via WhatsApp dari admin sebelum masa aktif habis agar langganan tidak terputus.', icon: '<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/></svg>' },
+                ],
+
+                flashSales: [
+                    { id: 1, name: 'Canva Pro', plan: 'User Reguler Tahunan', discount: '-25%', originalPrice: 'Rp1.078.700 /12 bln', promoPrice: 'Rp808.000 /12 bln', stockLabel: '4 Tersisa', soldOut: false },
+                    { id: 2, name: 'Canva Pro', plan: 'User Reguler Bulanan', discount: '-18%', originalPrice: 'Rp109.900 /1 bln', promoPrice: 'Rp89.500 /1 bln', stockLabel: '3 Tersisa', soldOut: false },
+                    { id: 3, name: 'Max (HBO)', plan: 'Tahunan', discount: '-38%', originalPrice: 'Rp305.900 /12 bln', promoPrice: 'Rp190.000 /12 bln', stockLabel: 'Kuota Habis', soldOut: true },
+                    { id: 4, name: 'Max (HBO)', plan: 'Bulanan', discount: '-40%', originalPrice: 'Rp40.400 /1 bln', promoPrice: 'Rp24.000 /1 bln', stockLabel: 'Kuota Habis', soldOut: true },
+                ],
+
+                products: [
+                    { 
+                        id: 'netflix', 
+                        name: 'Netflix', 
+                        category: 'Streaming', 
+                        isNew: false, 
+                        initial: 'N', 
+                        bgColor: '#E50914', 
+                        logoUrl: 'https://www.google.com/s2/favicons?domain=netflix.com&sz=128',
+                        officialPrice: 'Rp186.000 /bln', 
+                        groupSize: '5 Member', 
+                        variants: [{ name: 'User TV Sharing', duration: '1, 2, 3 Bln', price: 'Rp65.000 /bln' }, { name: 'User Sharing (Non TV)', duration: '1, 2, 3 Bln', price: 'Rp55.000 /bln' }, { name: 'User Host Non TV', duration: '1 Bln', price: 'Rp45.000 /bln' }] 
+                    },
+                    { 
+                        id: 'youtube', 
+                        name: 'YouTube Family', 
+                        category: 'Streaming', 
+                        isNew: false, 
+                        initial: 'YT', 
+                        bgColor: '#FF0000', 
+                        logoUrl: 'https://www.google.com/s2/favicons?domain=youtube.com&sz=128',
+                        officialPrice: 'Rp155.000 /bln', 
+                        groupSize: '5 Member', 
+                        variants: [{ name: 'Paket Sharing 1 Bulan', duration: '1 Bln', price: 'Rp45.000 /bln' }, { name: 'Paket Sharing 2 Bulan', duration: '2 Bln', price: 'Rp90.000 /2Bln' }, { name: 'Paket Sharing 3 Bulan', duration: '3 Bln', price: 'Rp135.000 /3Bln' }] 
+                    },
+                    { 
+                        id: 'spotify', 
+                        name: 'Spotify', 
+                        category: 'Musik', 
+                        isNew: false, 
+                        initial: 'SP', 
+                        bgColor: '#1DB954', 
+                        logoUrl: 'https://www.google.com/s2/favicons?domain=spotify.com&sz=128',
+                        officialPrice: 'Rp104.900 /bln', 
+                        groupSize: '3 Member', 
+                        variants: [{ name: 'Paket Sharing 1 Bulan', duration: '1 Bln', price: 'Rp55.000 / bln' }, { name: 'Paket Sharing 3 Bulan', duration: '3 Bln', price: 'Rp125.000 /3Bln' }] 
+                    },
+                    { 
+                        id: 'chatgpt', 
+                        name: 'ChatGPT Plus', 
+                        category: 'AI & Produktivitas', 
+                        isNew: false, 
+                        initial: 'AI', 
+                        bgColor: '#10A37F', 
+                        logoUrl: 'https://www.google.com/s2/favicons?domain=chatgpt.com&sz=128',
+                        officialPrice: 'Rp349.000 /bln', 
+                        groupSize: '5 Member', 
+                        variants: [{ name: 'Sharing 1 Bulan', duration: '1 Bln', price: 'Rp85.000 / bln' }] 
+                    },
+                    { 
+                        id: 'viu', 
+                        name: 'VIU', 
+                        category: 'Streaming', 
+                        isNew: false, 
+                        initial: 'VI', 
+                        bgColor: '#FFDB58', 
+                        logoUrl: 'https://www.google.com/s2/favicons?domain=viu.com&sz=128',
+                        officialPrice: 'Rp139.000 /3bln', 
+                        groupSize: '2 Member', 
+                        variants: [{ name: 'Sharing 3 Bulan', duration: '3 Bln', price: 'Rp40.000 / 3 bln' }] 
+                    },
+                    { 
+                        id: 'canva', 
+                        name: 'Canva Pro', 
+                        category: 'Desain & Edukasi', 
+                        isNew: false, 
+                        initial: 'CV', 
+                        bgColor: '#00C4CC', 
+                        logoUrl: 'https://www.google.com/s2/favicons?domain=canva.com&sz=128',
+                        officialPrice: 'Rp190.000 /bln', 
+                        groupSize: '5 Member', 
+                        variants: [{ name: 'Sharing 1 Bulan', duration: '1 Bln', price: 'Rp85.000 / bln' }] 
+                    },
+                    { 
+                        id: 'disney', 
+                        name: 'Disney+ Hotstar', 
+                        category: 'Streaming', 
+                        isNew: false, 
+                        initial: 'D+', 
+                        bgColor: '#113CCF', 
+                        logoUrl: 'https://www.google.com/s2/favicons?domain=disneyplus.com&sz=128',
+                        officialPrice: 'Rp119.000 /bln', 
+                        groupSize: '5 Member', 
+                        variants: [{ name: 'Paket Sharing 1 Bulan', duration: '1 Bln', price: 'Rp45.000 / bln' }, { name: 'Paket Sharing 1 Tahun', duration: '1 Thn', price: 'Rp325.000 /thn' }] 
+                    },
+                    { 
+                        id: 'prime', 
+                        name: 'Prime Vidio', 
+                        category: 'Streaming', 
+                        isNew: true, 
+                        initial: 'PV', 
+                        bgColor: '#00A8E1', 
+                        logoUrl: 'https://www.google.com/s2/favicons?domain=primevideo.com&sz=128',
+                        officialPrice: 'Rp60.000 /bln', 
+                        groupSize: '3 Member', 
+                        variants: [{ name: 'Sharing 1 Bulan', duration: '1 Bulan', price: 'Rp35.000 / bln' }] 
+                    },
+                    { 
+                        id: 'vidio', 
+                        name: 'Vidio Platinum', 
+                        category: 'Streaming', 
+                        isNew: false, 
+                        initial: 'VP', 
+                        bgColor: '#E11D48', 
+                        logoUrl: 'https://www.google.com/s2/favicons?domain=vidio.com&sz=128',
+                        officialPrice: 'Rp72.149 /bln', 
+                        groupSize: '1 Member', 
+                        variants: [{ name: 'Private 1 Bulan Mobile', duration: '1 Bln', price: 'Rp40.000 /bln' }, { name: 'Private 1 Bulan TV', duration: '1 Bln', price: 'Rp55.000 /bln' }] 
+                    },
+                    { 
+                        id: 'epl', 
+                        name: 'Vidio Ultimate EPL', 
+                        category: 'Streaming', 
+                        isNew: false, 
+                        initial: 'VU', 
+                        bgColor: '#D83B01', 
+                        logoUrl: 'https://www.google.com/s2/favicons?domain=vidio.com&sz=128',
+                        officialPrice: 'Rp238.649 /bln', 
+                        groupSize: '1 Member', 
+                        variants: [{ name: 'Private 1 Bulan Mobile', duration: '1 Bln', price: 'Rp110.000 /bln' }, { name: 'Private 1 Bulan Allscreen', duration: '1 Bulan', price: 'Rp190.000 /thn' }, { name: 'Private 1 Tahun Allscreen', duration: '1 Thn', price: 'Rp1.000.000 /thn' }] 
+                    },
+                    { 
+                        id: 'capcut', 
+                        name: 'CapCut Pro', 
+                        category: 'Desain & Edukasi', 
+                        isNew: false, 
+                        initial: 'CC', 
+                        bgColor: '#0F172A', 
+                        logoUrl: 'https://www.google.com/s2/favicons?domain=capcut.com&sz=128',
+                        officialPrice: 'Rp188.000 /bln', 
+                        groupSize: '3 Member', 
+                        variants: [{ name: 'Paket Sharing 1 Bulan', duration: '1 Bln', price: 'Rp70.000 /bln' }, { name: 'Paket Sharing 1 Tahun', duration: '1 Thn', price: 'Rp700.000 /thn' }] 
+                    },
+                ],
+
+                get filteredProducts() {
+                    return this.products.filter(p => {
+                        const matchCat = this.selectedCategory === 'Semua' || p.category === this.selectedCategory;
+                        const matchSearch = p.name.toLowerCase().includes(this.searchQuery.toLowerCase()) || p.category.toLowerCase().includes(this.searchQuery.toLowerCase());
+                        return matchCat && matchSearch;
+                    });
+                },
+
+                orderSteps: [
+                    { title: 'Hubungi Admin', desc: 'Hubungi WhatsApp jika mau memulai berlangganan akun!' },
+                    { title: 'Pilih Layanan', desc: 'Pilih layanan favoritmu dan tentukan lama berlangganan.' },
+                    { title: 'Payment', desc: 'Bisa Scan QRIS atau transfer ke no Rek yang sudah di sediakan. Otomatis terkonfirmasi.' },
+                    { title: 'Pesanan diterima', desc: 'Akun premium siap dinikmati. dan customer sudah bisa memakai akun yang sudah dibagikan' },
+                    { title: 'Selesai!', desc: 'Nikmati layanan premium resmi secara aman & hemat.' },
+                ],
+
+                faqs: [
+                    { q: 'Berapa lama proses berlangganan di Antigabutstore?', a: 'Proses Hanya Berlangsung 1-2 Jam tergantung antrian.' },
+                    { q: 'Mengapa harganya bisa lebih murah?', a: 'Kami menggunakan sistem sharing dalam pembelian paket berlangganan. Jadi kamu sama seperti patungan dengan customer lain.' },
+                    { q: 'Apa saja metode pembayaran yang diberikan?', a: 'Pembayaran via transfer Bank Mandiri, BRI, BCA, Dana, LinkAja, Dan di sediakan juga QRIS' },
+                    { q: 'Apakah akun yang diberikan aman?', a: 'Akun dijamin aman karena kami membayar langsung kepada penyedia layanan dengan cara yang.' },
+                    { q: 'Email dan Password darimana?', a: 'Email dan password berasal dari kami jadi kamu tinggal pakai dan tidak perlu ribet dengan kartu kredit.' },
+                    { q: 'Bagaimana cara memesan di Antigabutstore?', a: 'Kamu tinggal klik tombol pesan sekarang dan melakukan pembayaran, setelah itu akun akan dikirim ke kamu.' },
+                ]
+            }
+        }
+
+function promoSlider() {
+    return {
+        activeSlide: 0,
+        totalSlides: 3,
+        timer: null,
+        startAutoSlide() {
+            this.timer = setInterval(() => {
+                this.activeSlide = (this.activeSlide + 1) % this.totalSlides;
+            }, 3500); // Berganti otomatis setiap 3.5 detik
+        }
+    }
+}
+
+    </script>
+</body>
+</html>
