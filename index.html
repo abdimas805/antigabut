@@ -194,11 +194,6 @@
                 <img src="assets/images/poster3.jpeg" alt="Poster Promo 3" class="w-full h-full object-cover rounded-2xl" onerror="this.src='https://placehold.co/300x400?text=Poster+3+Tidak+Ditemukan'">
             </div>
 
-            <!-- Slide 4 -->
-            <div class="absolute inset-0 transition-opacity duration-700 ease-in-out flex items-center justify-center p-2" :class="activeSlide === 2 ? 'opacity-100 z-10' : 'opacity-0 z-0'">
-                <img src="assets/images/poster4.jpeg" alt="Poster Promo 4" class="w-full h-full object-cover rounded-2xl" onerror="this.src='https://placehold.co/300x400?text=Poster+3+Tidak+Ditemukan'">
-            </div>
-
             <!-- Indikator Dot di bagian bawah poster -->
             <div class="absolute bottom-4 z-20 flex items-center gap-2 bg-slate-900/40 backdrop-blur-md px-3 py-1.5 rounded-full">
                 <template x-for="(slide, index) in 3" :key="index">
